@@ -5,6 +5,8 @@ import { COLORS, MENU_ITEMS } from '@/constants'
 import {useSelector,useDispatch} from 'react-redux'
 import { changeBrushSize, changeColor } from '@/redux/slice/toolboxSlice'
 import cx from 'classnames'
+import { socket } from '@/socket'
+
 const ToolBar = () => {
 
   const dispatch = useDispatch()
@@ -16,10 +18,12 @@ const ToolBar = () => {
 
   const handleBrushSize=(e)=>{
       dispatch(changeBrushSize({item:activeMenuItem, size:e.target.value}))
-  }
+      socket.emit("changeConfig",{color, size: e.target.value})
+    }
   const handleColor=(newColor)=>{
-    
+      
       dispatch(changeColor({item:activeMenuItem, color:newColor}))
+      socket.emit("changeConfig",{color:newColor, size })
   }
   return (
     <div className={styles.toolbarContainer}>
